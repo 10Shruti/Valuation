@@ -288,17 +288,17 @@
             display: flex; flex-direction: column; box-shadow: 0 0 10px rgba(0,0,0,0.1);
             box-sizing: border-box; overflow: hidden; 
         } 
-        .header-box { text-align: center; margin-bottom: 8px; }
+         .header-box { text-align: center; margin-bottom: 8px; }
         .main-title { margin-top: 0; margin-bottom: 0; color: #991b1b; font-family: serif; font-size: 22px; font-weight: 900; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
         .date-header { display: flex; justify-content: flex-end; font-weight: 800; font-size: 14px; margin-bottom: 10px; }
         .customer-section { font-size: 13px; font-weight: 800; text-transform: uppercase; margin-bottom: 20px; }
         .info-row { margin-bottom: 6px; display: flex; }
         .label { min-width: 220px; }
         .value { border-bottom: 1px solid #000; flex-grow: 1; padding-left: 10px; white-space: pre-wrap; word-break: break-word; }
-        .photo-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3, minmax(0, 1fr)); gap: 8px; flex-grow: 1; min-height: 0; margin-bottom: 10mm; }
-        .jewelry-frame { border: 1.5px solid #000; display: flex; flex-direction: column; min-height: 0; background: #fff; position: relative; overflow: hidden; }
-        .image-wrapper { flex: 1; position: relative; width: 100%; height: 100%; box-sizing: border-box; overflow: hidden; }
-        .image-wrapper img { position: absolute; top: 12px; left: 12px; width: calc(100% - 24px); height: calc(100% - 24px); object-fit: contain; object-position: center; display: block; }
+        .photo-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3, minmax(0, 1fr)); gap: 8px; flex-grow: 1; min-height: 0; height: 100%; margin-bottom: 10mm; }
+        .jewelry-frame { border: 1.5px solid #000; display: flex; flex-direction: column; min-height: 0; height: 100%; background: #fff; position: relative; overflow: hidden; }
+        .image-wrapper { flex: 1; position: relative; width: 100%; height: 100%; box-sizing: border-box; overflow: hidden; display: flex; justify-content: center; align-items: center; padding: 12px; }
+        .image-wrapper img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
         .weight-label { border-top: 1.5px solid #000; text-align: center; font-weight: 900; font-size: 11px; padding: 4px 0; }
         .footer-section { margin-top: auto; width: 100%; display: flex; justify-content: space-between; font-size: 11px; font-weight: 900; border-top: 1px solid #cbd5e1; padding-top: 8px; z-index: 10; background: white; }
 
