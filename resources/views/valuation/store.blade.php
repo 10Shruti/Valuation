@@ -212,6 +212,7 @@
                 filename:     filename,
                 image:        { type: 'jpeg', quality: 0.98 },
             pagebreak:    { mode: ['css', 'legacy'] },
+            
                 html2canvas:  { 
                     scale: 2, 
                     useCORS: true, 
@@ -241,41 +242,87 @@
             };
 
             // Generate PDF as a Blob and upload it to the server
-            html2pdf().set(opt).from(element).outputPdf('blob').then((pdfBlob) => {
+            // html2pdf().set(opt).from(element).outputPdf('blob').then((pdfBlob) => {
                 
-                // 1. Trigger native browser download (the upward animation)
-                const blobUrl = URL.createObjectURL(pdfBlob);
-                const a = document.createElement('a');
-                a.href = blobUrl;
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(blobUrl);
+            //     // 1. Trigger native browser download (the upward animation)
+            //     const blobUrl = URL.createObjectURL(pdfBlob);
+            //     const a = document.createElement('a');
+            //     a.href = blobUrl;
+            //     a.download = filename;
+            //     document.body.appendChild(a);
+            //     a.click();
+            //     document.body.removeChild(a);
+            //     URL.revokeObjectURL(blobUrl);
 
-                // 2. Upload to the server silently in the background
-                let formData = new FormData();
-                formData.append('pdf', pdfBlob, filename);
+            //     // 2. Upload to the server silently in the background
+            //     let formData = new FormData();
+            //     formData.append('pdf', pdfBlob, filename);
 
-                fetch("{{ route('valuation.uploadPdf', $valuation->id) }}", {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        console.log('PDF successfully saved in the customer folder!');
-                    } else {
-                        console.error('Failed to save the PDF to the server.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            });
+            //     fetch("{{ route('valuation.uploadPdf', $valuation->id) }}", {
+            //         method: 'POST',
+            //         headers: {
+            //             'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            //         },
+            //         body: formData
+            //     })
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         if (data.success) {
+            //             console.log('PDF successfully saved in the customer folder!');
+            //         } else {
+            //             console.error('Failed to save the PDF to the server.');
+            //         }
+            //     })
+            //     .catch(error => {
+            //         console.error('Error:', error);
+            //     });
+            // });
+
+            html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
+
+    const totalPages = pdf.internal.getNumberOfPages();
+
+    
+    if (totalPages > 1) {
+        pdf.deletePage(totalPages);
+    }
+
+    const pdfBlob = pdf.output('blob');
+
+    
+    const blobUrl = URL.createObjectURL(pdfBlob);
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(blobUrl);
+
+   
+    let formData = new FormData();
+    formData.append('pdf', pdfBlob, filename);
+
+    fetch("{{ route('valuation.uploadPdf', $valuation->id) }}", {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('PDF saved successfully!');
+        } else {
+            console.error('Upload failed');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+
+});
         }
     </script> 
 
@@ -319,9 +366,13 @@
             border-radius: 0 !important;
             padding: 10mm 15mm 10mm 15mm !important;
             position: relative !important;
-            page-break-after: always !important;
+            /* page-break-after: always !important; */
             page-break-inside: avoid !important;
+             break-inside: avoid !important;
         }
+        .pdf-export-mode .a4-sheet:not(:last-child) {
+    page-break-after: always !important;
+}
         .pdf-export-mode .a4-sheet:last-of-type {
             page-break-after: auto !important;
         }
